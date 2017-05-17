@@ -10,14 +10,14 @@ use Yii;
  * @property integer $id
  * @property string $name
  * @property string $description
- * @property double $budget
- * @property string $begin_date
- * @property string $execute_time
+ * @property double $price
+ * @property string $begin_time
+ * @property string $end_time
  * @property integer $company_id
- * @property integer $bid_id
+ * @property integer $winner_bid_id
  *
  * @property Bid[] $bs
- * @property Bid $bid
+ * @property Bid $winnerBid
  * @property Company $company
  */
 class Tender extends \yii\db\ActiveRecord
@@ -36,12 +36,13 @@ class Tender extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['budget'], 'number'],
-            [['begin_date', 'execute_time'], 'safe'],
-            [['company_id', 'bid_id'], 'integer'],
+            [['price'], 'number'],
+            [['begin_time', 'end_time'], 'safe'],
+            ['end_time', 'checkIfBeginTimeSmaller'],
+            [['company_id', 'winner_bid_id'], 'integer'],
             [['name'], 'string', 'max' => 500],
             [['description'], 'string', 'max' => 2000],
-            [['bid_id'], 'exist', 'skipOnError' => true, 'targetClass' => Bid::className(), 'targetAttribute' => ['bid_id' => 'id']],
+            [['winner_bid_id'], 'exist', 'skipOnError' => true, 'targetClass' => Bid::className(), 'targetAttribute' => ['winner_bid_id' => 'id']],
             [['company_id'], 'exist', 'skipOnError' => true, 'targetClass' => Company::className(), 'targetAttribute' => ['company_id' => 'id']],
         ];
     }
@@ -55,13 +56,25 @@ class Tender extends \yii\db\ActiveRecord
             'id' => 'ID',
             'name' => 'Name',
             'description' => 'Description',
-            'budget' => 'Budget',
-            'begin_date' => 'Begin Date',
-            'execute_time' => 'Execute Time',
+            'price' => 'Price',
+            'begin_time' => 'Begin Time',
+            'end_time' => 'End Time',
             'company_id' => 'Company ID',
-            'bid_id' => 'Bid ID',
+            'winner_bid_id' => 'Winner Bid ID',
         ];
     }
+
+    public function checkIfBeginTimeSmaller() {
+        $begin_time = new \DateTime($this->begin_time);
+        $end_time = new \DateTime($this->end_time);
+        if($begin_time > $end_time) {
+            $this->addError($this->end_time, 'End time more than begin!');
+            Yii::$app->session->setFlash('error', 'End time more than begin time');
+        }
+        return true;
+    }
+
+
 
     /**
      * @return \yii\db\ActiveQuery
@@ -74,9 +87,9 @@ class Tender extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getBid()
+    public function getWinnerBid()
     {
-        return $this->hasOne(Bid::className(), ['id' => 'bid_id']);
+        return $this->hasOne(Bid::className(), ['id' => 'winner_bid_id']);
     }
 
     /**

@@ -2,6 +2,9 @@
 
 namespace backend\controllers;
 
+use common\models\helpers\ArrayHelper;
+use common\models\service\CompanyService;
+use common\models\service\TenderService;
 use Yii;
 use common\models\db\Bid;
 use common\models\db\search\BidSearch;
@@ -65,11 +68,14 @@ class BidController extends Controller
     {
         $model = new Bid();
 
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
+                'company_list' => CompanyService::getCompaniesAssocArray(),
+                'tender_list' => TenderService::getTendersAssocArray(),
             ]);
         }
     }
@@ -82,13 +88,19 @@ class BidController extends Controller
      */
     public function actionUpdate($id)
     {
+
         $model = $this->findModel($id);
+
+        $company_list = ArrayHelper::setValueAtBeginning($id, CompanyService::getCompaniesAssocArray());
+        $tender_list = ArrayHelper::setValueAtBeginning($id, TenderService::getTendersAssocArray());
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
                 'model' => $model,
+                'company_list' => $company_list,
+                'tender_list' => $tender_list,
             ]);
         }
     }

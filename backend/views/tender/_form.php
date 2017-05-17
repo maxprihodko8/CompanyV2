@@ -9,6 +9,7 @@ use yii\widgets\ActiveForm;
 ?>
 
 <div class="tender-form">
+    <?= Yii::$app->session->getFlash('error') ?>
 
     <?php $form = ActiveForm::begin(); ?>
 
@@ -16,15 +17,18 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'description')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'budget')->textInput() ?>
+    <?= $form->field($model, 'price')->textInput() ?>
 
-    <?= $form->field($model, 'begin_date')->textInput() ?>
+    <p>
+        <?= $this->render('../parts/dateTimeWidget', ['model' => $model, 'modelName' => 'begin_time']) ?>
+    </p>
+    <p>
+        <?= $this->render('../parts/dateTimeWidget', ['model' => $model, 'modelName' => 'end_time']) ?>
+    </p>
 
-    <?= $form->field($model, 'execute_time')->textInput() ?>
+    <?= $form->field($model, 'company_id')->dropDownList($company_list ? $company_list : []) ?>
 
-    <?= $form->field($model, 'company_id')->textInput() ?>
-
-    <?= $form->field($model, 'bid_id')->textInput() ?>
+    <?= $form->field($model, 'winner_bid_id')->dropDownList($bids_list ? $bids_list : []) ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

@@ -1,6 +1,9 @@
 <?php
 namespace backend\controllers;
 
+use common\models\service\BidService;
+use common\models\service\CompanyService;
+use common\models\service\TenderService;
 use Yii;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
@@ -60,7 +63,12 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        return $this->render('index',
+            [
+                'tenderCount' => TenderService::getTendersCount(),
+                'bidCount' => BidService::getBidsCount(),
+                'CompanyCount' => CompanyService::getCompaniesCount()
+            ]);
     }
 
     /**

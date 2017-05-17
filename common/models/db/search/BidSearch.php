@@ -19,7 +19,7 @@ class BidSearch extends Bid
     {
         return [
             [['id', 'company_id', 'tender_id'], 'integer'],
-            [['description', 'begin_time', 'time_end'], 'safe'],
+            [['description', 'begin_time', 'end_time', 'tenderName', 'companyName', 'resultTime'], 'safe'],
             [['price'], 'number'],
         ];
     }
@@ -43,12 +43,28 @@ class BidSearch extends Bid
     public function search($params)
     {
         $query = Bid::find();
+        $query->joinWith(['company', 'tender']);
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
+
+        $sort =  $dataProvider->sort;
+        $sort->attributes = array_merge($sort->attributes, [
+            'companyName' => [
+                'asc' => ['company.name' => SORT_ASC],
+                'desc' => ['company.name' => SORT_DESC],
+                'label' => 'Company Name'
+            ],
+            'resultTime' => [
+                'asc' => ['UNIX_TIMESTAMP(bid.end_time) - UNIX_TIMESTAMP(bid.begin_time)' => SORT_ASC],
+                'desc' => ['UNIX_TIMESTAMP(bid.begin_time) - UNIX_TIMESTAMP(bid.end_time)' => SORT_DESC],
+                'label' => 'Company Name'
+            ],
+        ]);
+        $dataProvider->sort = $sort;
 
         $this->load($params);
 
@@ -65,7 +81,7 @@ class BidSearch extends Bid
             'begin_time' => $this->begin_time,
             'company_id' => $this->company_id,
             'tender_id' => $this->tender_id,
-            'time_end' => $this->time_end,
+            'end_time' => $this->end_time,
         ]);
 
         $query->andFilterWhere(['like', 'description', $this->description]);

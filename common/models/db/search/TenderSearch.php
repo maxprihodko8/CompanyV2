@@ -18,9 +18,9 @@ class TenderSearch extends Tender
     public function rules()
     {
         return [
-            [['id', 'company_id', 'bid_id'], 'integer'],
-            [['name', 'description', 'begin_date', 'execute_time'], 'safe'],
-            [['budget'], 'number'],
+            [['id', 'company_id', 'winner_bid_id'], 'integer'],
+            [['name', 'description', 'begin_time', 'end_time'], 'safe'],
+            [['price'], 'number'],
         ];
     }
 
@@ -61,11 +61,11 @@ class TenderSearch extends Tender
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'budget' => $this->budget,
-            'begin_date' => $this->begin_date,
-            'execute_time' => $this->execute_time,
+            'price' => $this->price,
+            'begin_time' => $this->begin_time,
+            'end_time' => $this->end_time,
             'company_id' => $this->company_id,
-            'bid_id' => $this->bid_id,
+            'winner_bid_id' => $this->winner_bid_id,
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name])

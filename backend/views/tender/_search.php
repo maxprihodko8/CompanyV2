@@ -21,15 +21,15 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'description') ?>
 
-    <?= $form->field($model, 'budget') ?>
+    <?= $form->field($model, 'price') ?>
 
-    <?= $form->field($model, 'begin_date') ?>
+    <?= $form->field($model, 'begin_time') ?>
 
-    <?php // echo $form->field($model, 'execute_time') ?>
+    <?php // echo $form->field($model, 'end_time') ?>
 
     <?php // echo $form->field($model, 'company_id') ?>
 
-    <?php // echo $form->field($model, 'bid_id') ?>
+    <?php // echo $form->field($model, 'winner_bid_id') ?>
 
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>

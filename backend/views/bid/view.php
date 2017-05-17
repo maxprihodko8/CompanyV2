@@ -34,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'begin_time',
             'company_id',
             'tender_id',
-            'time_end',
+            'end_time',
         ],
     ]) ?>
 

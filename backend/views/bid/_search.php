@@ -27,7 +27,7 @@ use yii\widgets\ActiveForm;
 
     <?php // echo $form->field($model, 'tender_id') ?>
 
-    <?php // echo $form->field($model, 'time_end') ?>
+    <?php // echo $form->field($model, 'end_time') ?>
 
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>

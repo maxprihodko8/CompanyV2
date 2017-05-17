@@ -31,12 +31,18 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'name',
             'description',
-            'budget',
-            'begin_date',
-            'execute_time',
+            'price',
+            'begin_time',
+            'end_time',
             'company_id',
-            'bid_id',
+            'winner_bid_id',
         ],
     ]) ?>
+
+    <h1><?= "Bids for tender" ?></h1>
+
+
+    <?= $this->render('../parts/bid_grid_view', ['searchModel' => $searchModelBid, 'dataProvider' => $dataProviderBid]) ?>
+
 
 </div>

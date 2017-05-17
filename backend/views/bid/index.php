@@ -18,21 +18,5 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= Html::a('Create Bid', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
-            'description',
-            'price',
-            'begin_time',
-            'company_id',
-            // 'tender_id',
-            // 'time_end',
-
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]); ?>
+    <?= $this->render('../parts/bid_grid_view', ['searchModel' => $searchModel, 'dataProvider' => $dataProvider]) ?>
 </div>

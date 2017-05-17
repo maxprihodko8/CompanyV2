@@ -69,13 +69,4 @@ class Company extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Tender::className(), ['company_id' => 'id']);
     }
-
-    /**
-     * @inheritdoc
-     * @return \common\models\db\query\CompanyQuery the active query used by this AR class.
-     */
-    public static function find()
-    {
-        return new \common\models\db\query\CompanyQuery(get_called_class());
-    }
 }

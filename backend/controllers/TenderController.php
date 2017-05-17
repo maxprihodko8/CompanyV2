@@ -2,6 +2,10 @@
 
 namespace backend\controllers;
 
+use common\models\db\search\BidSearch;
+use common\models\helpers\ArrayHelper;
+use common\models\service\BidService;
+use common\models\service\CompanyService;
 use Yii;
 use common\models\db\Tender;
 use common\models\db\search\TenderSearch;
@@ -51,8 +55,15 @@ class TenderController extends Controller
      */
     public function actionView($id)
     {
+        $searchModelBid = new BidSearch();
+        $dataProviderBid = $searchModelBid->search(Yii::$app->request->queryParams);
+        $dataProviderBid->query->where(['tender_id' => $id]);
+        $dataProviderBid->query->orderBy('(UNIX_TIMESTAMP(bid.end_time) - UNIX_TIMESTAMP(bid.begin_time)) * bid.price');
+
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'dataProviderBid' => $dataProviderBid,
+            'searchModelBid' => $searchModelBid,
         ]);
     }
 
@@ -65,11 +76,16 @@ class TenderController extends Controller
     {
         $model = new Tender();
 
+        $bids_list = BidService::getBidsListAssocArray();
+        $company_list = CompanyService::getCompaniesAssocArray();
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
+                'bids_list' => $bids_list,
+                'company_list' => $company_list,
             ]);
         }
     }
@@ -84,11 +100,16 @@ class TenderController extends Controller
     {
         $model = $this->findModel($id);
 
+        $bids_list = ArrayHelper::setValueAtBeginning($model->winner_bid_id, BidService::getBidsListAssocArray());
+        $company_list = ArrayHelper::setValueAtBeginning($id, CompanyService::getCompaniesAssocArray());
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
                 'model' => $model,
+                'bids_list' => $bids_list,
+                'company_list' => $company_list,
             ]);
         }
     }
