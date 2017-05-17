@@ -3,6 +3,7 @@
 namespace backend\controllers;
 
 use common\models\helpers\ArrayHelper;
+use common\models\SearchModel;
 use common\models\service\CompanyService;
 use common\models\service\TenderService;
 use Yii;
@@ -39,11 +40,17 @@ class BidController extends Controller
     public function actionIndex()
     {
         $searchModel = new BidSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        if ($searchModel->load(Yii::$app->request->post())) {
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        } else {
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        }
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'searchFieldModel' => $searchModel
         ]);
     }
 

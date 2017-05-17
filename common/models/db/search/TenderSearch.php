@@ -12,6 +12,8 @@ use common\models\db\Tender;
  */
 class TenderSearch extends Tender
 {
+    public $search_field;
+
     /**
      * @inheritdoc
      */
@@ -19,7 +21,7 @@ class TenderSearch extends Tender
     {
         return [
             [['id', 'company_id', 'winner_bid_id'], 'integer'],
-            [['name', 'description', 'begin_time', 'end_time'], 'safe'],
+            [['name', 'description', 'begin_time', 'end_time', 'search_field'], 'safe'],
             [['price'], 'number'],
         ];
     }
@@ -70,6 +72,13 @@ class TenderSearch extends Tender
 
         $query->andFilterWhere(['like', 'name', $this->name])
             ->andFilterWhere(['like', 'description', $this->description]);
+
+        $query->orFilterWhere(['LIKE', 'tender.id', $this->search_field])
+            ->orFilterWhere(['LIKE', 'tender.name', $this->search_field])
+            ->orFilterWhere(['LIKE', 'tender.description', $this->search_field])
+            ->orFilterWhere(['LIKE', 'tender.price', $this->search_field])
+            ->orFilterWhere(['LIKE', 'tender.begin_time', $this->search_field])
+            ->orFilterWhere(['LIKE', 'tender.end_time', $this->search_field]);
 
         return $dataProvider;
     }

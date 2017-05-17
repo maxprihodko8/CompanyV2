@@ -36,7 +36,11 @@ class CompanyController extends Controller
     public function actionIndex()
     {
         $searchModel = new CompanySearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        if ($searchModel->load(Yii::$app->request->post())) {
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        } else {
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        }
 
         return $this->render('index', [
             'searchModel' => $searchModel,

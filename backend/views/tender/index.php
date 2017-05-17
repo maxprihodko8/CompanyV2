@@ -15,6 +15,16 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
+    <?php
+    $form = \yii\widgets\ActiveForm::begin();
+    echo $form->field($searchModel, 'search_field', [
+        'template' => '<div class="input-group">{input}<span class="input-group-btn">' .
+            Html::submitButton('Search', ['class' => 'btn btn-default']) .
+            '</span></div>',
+    ])->textInput(['placeholder' => 'Search']);
+    $form->end();
+    ?>
+
     <p>
         <?= Html::a('Create Tender', ['create'], ['class' => 'btn btn-success']) ?>
     </p>

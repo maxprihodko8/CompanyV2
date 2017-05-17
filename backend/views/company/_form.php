@@ -20,7 +20,9 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'contact_user')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'register_date')->textInput() ?>
+    <p>
+        <?= $this->render('../parts/dateTimeWidget', ['model' => $model, 'modelName' => 'register_date']) ?>
+    </p>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

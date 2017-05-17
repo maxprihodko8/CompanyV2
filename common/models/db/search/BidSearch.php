@@ -12,6 +12,8 @@ use common\models\db\Bid;
  */
 class BidSearch extends Bid
 {
+
+    public $search_field;
     /**
      * @inheritdoc
      */
@@ -19,7 +21,7 @@ class BidSearch extends Bid
     {
         return [
             [['id', 'company_id', 'tender_id'], 'integer'],
-            [['description', 'begin_time', 'end_time', 'tenderName', 'companyName', 'resultTime'], 'safe'],
+            [['description', 'begin_time', 'end_time', 'tenderName', 'companyName', 'resultTime', 'search_field'], 'safe'],
             [['price'], 'number'],
         ];
     }
@@ -61,7 +63,12 @@ class BidSearch extends Bid
             'resultTime' => [
                 'asc' => ['UNIX_TIMESTAMP(bid.end_time) - UNIX_TIMESTAMP(bid.begin_time)' => SORT_ASC],
                 'desc' => ['UNIX_TIMESTAMP(bid.begin_time) - UNIX_TIMESTAMP(bid.end_time)' => SORT_DESC],
-                'label' => 'Company Name'
+                'label' => 'Result time'
+            ],
+            'tenderName' => [
+                'asc' => ['tender.name' => SORT_ASC],
+                'desc' => ['tender.name' => SORT_DESC],
+                'label' => 'Tender Name'
             ],
         ]);
         $dataProvider->sort = $sort;
@@ -85,6 +92,14 @@ class BidSearch extends Bid
         ]);
 
         $query->andFilterWhere(['like', 'description', $this->description]);
+
+        $query->orFilterWhere(['LIKE', 'bid.id', $this->search_field])
+        ->orFilterWhere(['LIKE', 'bid.price', $this->search_field])
+        ->orFilterWhere(['LIKE', 'bid.description', $this->search_field])
+        ->orFilterWhere(['LIKE', 'bid.begin_time', $this->search_field])
+        ->orFilterWhere(['LIKE', 'bid.end_time', $this->search_field])
+        ->orFilterWhere(['LIKE', 'bid.tender_id', $this->search_field])
+        ->orFilterWhere(['LIKE', 'bid.company_id', $this->search_field]);
 
         return $dataProvider;
     }
