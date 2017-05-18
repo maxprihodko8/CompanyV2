@@ -146,14 +146,12 @@ class SiteController extends Controller
      *
      * @return mixed
      */
-    /*public function actionSignup()
+    public function actionSignup()
     {
         $model = new SignupForm();
         if ($model->load(Yii::$app->request->post())) {
             if ($user = $model->signup()) {
-                if (Yii::$app->getUser()->login($user)) {
-                    return $this->goHome();
-                }
+                Yii::$app->session->setFlash('success', 'You successfully added new user');
             }
         }
 

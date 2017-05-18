@@ -19,7 +19,7 @@ class BidService
     }
 
     public static function getBidsCount() {
-        return count(self::getBids());
+        return Bid::find()->count();
     }
 
     public static function getBidsListAssocArray() {

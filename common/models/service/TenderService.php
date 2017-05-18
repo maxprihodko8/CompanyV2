@@ -8,6 +8,7 @@
  */
 namespace common\models\service;
 
+use common\models\db\Tender;
 use yii\helpers\ArrayHelper;
 
 class TenderService
@@ -18,7 +19,7 @@ class TenderService
     }
 
     public static function getTendersCount() {
-        return count(self::getTenders());
+        return Tender::find()->count();
     }
 
     public static function getTendersAssocArray() {

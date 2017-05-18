@@ -8,6 +8,7 @@
  */
 namespace common\models\service;
 
+use common\models\db\Company;
 use yii\helpers\ArrayHelper;
 
 class CompanyService
@@ -18,7 +19,7 @@ class CompanyService
     }
 
     public static function getCompaniesCount() {
-        return count(self::getCompanies());
+        return Company::find()->count();
     }
 
     public static function getCompaniesAssocArray() {
