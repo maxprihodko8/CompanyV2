@@ -12,7 +12,9 @@ use common\models\db\Company;
  */
 class CompanySearch extends Company
 {
-    public $search_field;
+    public $search_field_main;
+    public $search_field_additional;
+    public $search_field_date;
 
     /**
      * @inheritdoc
@@ -21,7 +23,7 @@ class CompanySearch extends Company
     {
         return [
             [['id'], 'integer'],
-            [['name', 'adress', 'phone', 'contact_user', 'register_date', 'search_field'], 'safe'],
+            [['name', 'adress', 'phone', 'contact_user', 'register_date', 'search_field_main', 'search_field_additional', 'search_field_date'], 'safe'],
         ];
     }
 
@@ -70,12 +72,12 @@ class CompanySearch extends Company
             ->andFilterWhere(['like', 'phone', $this->phone])
             ->andFilterWhere(['like', 'contact_user', $this->contact_user]);
 
-        $query->orFilterWhere(['LIKE', 'company.id', $this->search_field])
-            ->orFilterWhere(['LIKE', 'company.name', $this->search_field])
-            ->orFilterWhere(['LIKE', 'company.adress', $this->search_field])
-            ->orFilterWhere(['LIKE', 'company.phone', $this->search_field])
-            ->orFilterWhere(['LIKE', 'company.contact_user', $this->search_field])
-            ->orFilterWhere(['LIKE', 'company.register_date', $this->search_field]);
+        $query->orFilterWhere(['LIKE', 'company.id', $this->search_field_main])
+            ->orFilterWhere(['LIKE', 'company.name', $this->search_field_main])
+            ->orFilterWhere(['LIKE', 'company.adress', $this->search_field_main])
+            ->orFilterWhere(['LIKE', 'company.phone', $this->search_field_additional])
+            ->orFilterWhere(['LIKE', 'company.contact_user', $this->search_field_additional])
+            ->orFilterWhere(['LIKE', 'company.register_date', $this->search_field_date]);
 
         return $dataProvider;
     }

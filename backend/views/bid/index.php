@@ -17,14 +17,16 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php
     $form = \yii\widgets\ActiveForm::begin();
-    echo $form->field($searchModel, 'search_field', [
-        'template' => '<div class="input-group">{input}<span class="input-group-btn">' .
-            Html::submitButton('Search', ['class' => 'btn btn-default']) .
-            '</span></div>',
-    ])->textInput(['placeholder' => 'Search']);
+        echo $form->field($searchModel, 'search_field_main')->textInput(['placeholder' => 'Search by id, price']);
+
+        echo $form->field($searchModel, 'search_field_additional')->textInput(['placeholder' => 'Search by description']);
+
+        echo $this->render('../parts/dateTimeWidget', ['model' => $searchModel, 'modelName' => 'search_field_date']);
+        echo Html::submitButton('Search', ['class' => 'btn btn-primary']);
     $form->end();
     ?>
 
+    <br>
 <p>
 <?= Html::a('Create Bid', ['create'], ['class' => 'btn btn-success']) ?>
 </p>
